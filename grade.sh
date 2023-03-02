@@ -9,7 +9,7 @@ cp -r lib student-submission
 
 cd student-submission
 
-if [[-f ListExamples.java]]
+if [[ -f ListExamples.java ]]
 then 
     echo "File found"
 else 
@@ -17,10 +17,18 @@ else
     exit 1
 fi
 
-javac -cp .:lib/hamcrest-core-1.3.jar:lib/junit-4.13.2.jar *.java
-if [[$? -ne 0]] 
+javac -cp .:lib/hamcrest-core-1.3.jar:lib/junit-4.13.2.jar *.java 
+if [[ $? -ne 0 ]] 
     then echo "Compile Failed"
     exit 1
 else 
     echo "Compile Success"
+fi
+
+java -cp .:lib/hamcrest-core-1.3.jar:lib/junit-4.13.2.jar org.junit.runner.JUnitCore TestListExamples > Grade.java
+if [[ $? -ne 0 ]] 
+    then grep "Failures" Grade.java
+    exit 1
+else 
+    echo "A"
 fi
